@@ -15,3 +15,4 @@ This notificator receives notifications from CodePipeline and notify them to Dis
       - codepipeline-pipeline-pipeline-execution-resumed
       - codepipeline-pipeline-pipeline-execution-succeeded
       - codepipeline-pipeline-pipeline-execution-superseded
+1. Make the Lambda function subscribed to the SNS Topic.
