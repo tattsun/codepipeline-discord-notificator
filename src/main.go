@@ -43,22 +43,25 @@ func createEmbed(event CodePipelineEvent) discord.Embed {
 	builder := discord.NewEmbedBuilder().
 		SetTitlef("%s: %s", event.Detail.Pipeline, event.Detail.State).
 		AddField("ExecutionId", event.Detail.ExecutionId, false).
-		AddField("URL", fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codepipeline/pipelines/%s/executions/%s/timeline?region=%s", event.Region, event.Detail.Pipeline, event.Detail.ExecutionId, event.Region), false).
-		AddField("Time", event.Time.Local().String(), false)
+		AddField("URL", fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codepipeline/pipelines/%s/executions/%s/timeline?region=%s", event.Region, event.Detail.Pipeline, event.Detail.ExecutionId, event.Region), false)
 
 	switch event.Detail.State {
 	case "STARTED":
-		return builder.SetColor(7506394).
-			AddField("ExecutionTrigger", event.Detail.ExecutionTrigger.TriggerType+":"+event.Detail.ExecutionTrigger.TriggerDetail, false).Build()
+		builder = builder.SetColor(7506394).
+			AddField("ExecutionTrigger", event.Detail.ExecutionTrigger.TriggerType+":"+event.Detail.ExecutionTrigger.TriggerDetail, false)
 	case "SUCCEEDED":
-		return builder.SetColor(3066993).Build()
+		builder = builder.SetColor(3066993)
 	case "FAILED":
-		return builder.SetColor(15158332).Build()
+		builder = builder.SetColor(15158332)
 	case "CANCELED":
-		return builder.SetColor(10070709).Build()
+		builder = builder.SetColor(10070709)
 	default:
-		return builder.SetColor(7506394).Build()
+		builder = builder.SetColor(7506394)
 	}
+
+	return builder.
+		AddField("Time", event.Time.Local().String(), false).
+		Build()
 }
 
 func HandleRequest(ctx context.Context, event events.SNSEvent) (string, error) {
