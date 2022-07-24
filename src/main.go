@@ -43,6 +43,7 @@ func createEmbed(event CodePipelineEvent) discord.Embed {
 	builder := discord.NewEmbedBuilder().
 		SetTitlef("%s: %s", event.Detail.Pipeline, event.Detail.State).
 		AddField("ExecutionId", event.Detail.ExecutionId, false).
+		AddField("URL", fmt.Sprintf("https://%s.console.aws.amazon.com/codesuite/codepipeline/pipelines/%s/executions/%s/timeline?region=%s", event.Region, event.Detail.Pipeline, event.Detail.ExecutionId, event.Region), false).
 		AddField("Time", event.Time.Local().String(), false)
 
 	switch event.Detail.State {
